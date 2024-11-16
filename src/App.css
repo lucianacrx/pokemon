@@ -12,18 +12,37 @@ body {
 }
 
 .pokemon-list-wrapper {
+  position: relative;
   width: 30%;
+  height: 92vh;
   overflow-y: scroll;
   background-color: #D5D5D5;
   padding: 15px;
   border: 1px solid #000000;
 }
 
+.pokemon-list {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+}
+
 .pokemon-list-item {
   background-color: #E2E2E2;
   padding: 8px;
   border-radius: 4px;
-  cursor: pointer;
+  text-align: left;
+  text-transform: capitalize;
+}
+
+.pokemon-list-item div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pokemon-list-item:not(:last-child) {
@@ -32,7 +51,7 @@ body {
 
 .pokemon-detail-wrapper {
   display: flex;
-  flex: 1;
+  width: 70%;
   margin-left: 25px;
   background-color: #FFFFFF;
   border: 1px solid #000000;
@@ -45,15 +64,15 @@ body {
 
 .circle-wrapper {
   position: relative;
-  margin-bottom: 70px;
+  margin-bottom: 30px;
+  overflow: hidden;
 }
 
 .circle {
-  height: 20vw;
+  height: 40vw;
   width: 40vw;
-  border-bottom-left-radius: 270px;
-  border-bottom-right-radius: 270px;
-  margin: 0 auto;
+  border-radius: 50%;
+  margin: -18vw auto 0;
 }
 
 .images-wrapper {
@@ -73,7 +92,7 @@ body {
 
 .type-img {
   position: absolute;
-  height: 150%;
+  height: 30vw;
   width: 100%;
   left: 0;
   top: -60px;
@@ -84,8 +103,9 @@ body {
   left: 50%;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
-  height: 300px;
+  height: 20vw;
   position: absolute;
+  bottom: 0;
 }
 
 .pokemon-type-image {
@@ -163,6 +183,27 @@ body {
   padding: 8px;
   width: 154px;
   font-size: 18px;
+  text-transform: capitalize;
+}
+
+.retry-button {
+  color: #000000;
+}
+
+/* Bigger screens */
+@media (min-width: 1900px) {
+  .circle {
+    height: 28vw;
+    width: 26vw;
+  }
+
+  .type-img {
+    height: 15vw;
+  }
+
+  .pokemon-image {
+    height: 11vw;
+  }
 }
 
 @media (max-width: 768px) {
@@ -172,14 +213,11 @@ body {
 
   .pokemon-detail-wrapper {
     width: 60%;
+    padding: 0 10px;
   }
 
   .type-img {
     top: -40px
-  }
-
-  .pokemon-image {
-    height: 180px;
   }
 
   .types-container {
@@ -188,11 +226,6 @@ body {
 
   .type-wrapper:not(:last-child) {
     margin-bottom: 20px;
-  }
-
-  .type-img {
-    height: 100%;
-    top: -0;
   }
 }
 

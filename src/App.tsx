@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import "./App.css";
 import {
@@ -12,28 +14,45 @@ import {
   getImageConfigFromType,
 } from "./helpers";
 
+const Alert = ({ message, onButtonClick }) => (
+  <div>
+    <p>{message}</p>
+    <button className="retry-button" onClick={onButtonClick}>Retry</button>
+  </div>
+);
+
 function App() {
   const [pokemonCollection, setPokemonCollection] = useState<ApiRow[]>([]);
   const [selectedPkmn, setSelectedPkmn] = useState<AppPkmnDetail | undefined>(
     undefined
   );
 
+  async function getAllPokemon() {
+    try {
+      const pokemonData = await fetchAllKantoPokemon();
+      setPokemonCollection(pokemonData);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
     if (pokemonCollection.length > 0) {
       return;
     }
-    
-    (async() => {
-      const pokemonData = await fetchAllKantoPokemon();
-      setPokemonCollection(pokemonData);
-    })();
+    (async() => getAllPokemon())();
   }, []);
 
   async function handlePokemonSelect(name: string) {
-    const detail = await fetchPokemonDetail(name);
-    if (detail) {
-      const appDetail = getAppPkmnDetailFromApi(detail);
-      setSelectedPkmn(appDetail);
+    try {
+      const detail = await fetchPokemonDetail(name);
+      if (detail) {
+        const appDetail = getAppPkmnDetailFromApi(detail);
+        setSelectedPkmn(appDetail);
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error(<Alert message="Error fetching all Pokemon" onButtonClick={() => handlePokemonSelect(name)} />);
     }
   }
 
@@ -49,17 +68,20 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <div style={{ width: "100%", height: "100%", display: "flex" }}>
         <div className="pokemon-list-wrapper">
-          {pokemonCollection?.map((pokemonRow) => {
-            return (
-              <div key={pokemonRow.url} className="pokemon-list-item">
-                <div onClick={() => handlePokemonSelect(pokemonRow.name)}>
-                  {pokemonRow.name}
+          <div className="pokemon-list">
+            {pokemonCollection?.map((pokemonRow) => {
+              return (
+                <div key={pokemonRow.url} className="pokemon-list-item" onClick={() => handlePokemonSelect(pokemonRow.name)}>
+                  <div>
+                    {pokemonRow.name}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
         <div className="pokemon-detail-wrapper">
           {selectedPkmn ? (
